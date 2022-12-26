@@ -32,4 +32,17 @@ public class TestServlet extends HttpServlet {
             Files.copy(file, os);
         }
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String pathInfo = req.getPathInfo();
+
+        if (pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
+        Path file = Path.of(osPrefix, pathInfo);
+
+        System.out.println(pathInfo);
+        try (ServletOutputStream os = resp.getOutputStream()) {
+            Files.copy(file, os);
+        }
+    }
 }
