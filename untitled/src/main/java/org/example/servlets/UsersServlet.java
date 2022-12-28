@@ -6,7 +6,6 @@ import org.example.Profile;
 import org.example.dao.ProfileDao;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,23 +13,26 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TestServlet extends HttpServlet {
+public class UsersServlet extends HttpServlet {
     private final String osPrefix;
     private final ProfileDao users;
     private int showedUsers;
     private List<Profile> liked;
 
-    public TestServlet(String osPrefix, ProfileDao users) {
+    public UsersServlet(String osPrefix, ProfileDao users) {
         this.osPrefix = osPrefix;
         this.users = users;
         liked = new ArrayList<>();
         showedUsers = 0;
+    }
+
+    public List<Profile> getLiked() {
+        return liked;
     }
 
     @Override
@@ -38,9 +40,11 @@ public class TestServlet extends HttpServlet {
         System.out.println("GET!!");
         String pathInfo = req.getPathInfo();
 
-        if (pathInfo == null) {
+        if (pathInfo == null)
             pathInfo = "/like-page.ftl";
-        }
+
+        if (showedUsers == users.getAll().size() - 1)
+            resp.sendRedirect("/liked");
 
         Configuration conf = new Configuration(Configuration.VERSION_2_3_31);
         conf.setDefaultEncoding(String.valueOf(StandardCharsets.UTF_8));
@@ -51,7 +55,6 @@ public class TestServlet extends HttpServlet {
         data.put("imgURL", users.getAll().get(showedUsers).getImgURL());
 
         if (pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
-        Path file = Path.of(osPrefix, pathInfo);
 
         try (PrintWriter w = resp.getWriter()) {
             conf.getTemplate(pathInfo).process(data, w);
@@ -67,16 +70,14 @@ public class TestServlet extends HttpServlet {
         Path file = Path.of(osPrefix, pathInfo);
 
         System.out.println(req.getParameter("isLiked"));
-        if(req.getParameter("isLiked").equals("true"))
-            liked.add(users.getAll().get(showedUsers));
+        if (req.getParameter("isLiked").equals("true"))
+            users.addLiked(users.getAll().get(showedUsers));
         showedUsers++;
-        if(showedUsers == users.getAll().size()){
+        if (showedUsers == users.getAll().size()) {
             showedUsers = 0;
-
         }
 
-
         System.out.println(pathInfo);
-        doGet(req,resp);
+        doGet(req, resp);
     }
 }
