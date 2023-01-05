@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ProfileDao implements DAO<Profile>{
+public class ProfileDao implements DAO<Profile> {
     private List<Profile> profiles = new ArrayList<>();
     private List<Profile> liked = new ArrayList<>();
 
@@ -16,13 +16,14 @@ public class ProfileDao implements DAO<Profile>{
     public List<Profile> getLiked() {
         return liked;
     }
+
     public void addLiked(Profile like) {
         liked.add(like);
     }
 
     @Override
     public Optional<Profile> get(int id) {
-        return Optional.ofNullable(profiles.get((int)id));
+        return Optional.ofNullable(profiles.get((int) id));
     }
 
     @Override
