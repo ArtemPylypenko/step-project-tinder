@@ -70,7 +70,9 @@ public class LoginServlet extends HttpServlet {
 
                 resp.sendRedirect("/users");
             }else {
-                resp.sendRedirect("/login");
+                User curUser = controller.getUserByLogin(req.getParameter("login"));
+                resp.addCookie(new Cookie("id", curUser.getId()));
+                resp.sendRedirect("/users");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

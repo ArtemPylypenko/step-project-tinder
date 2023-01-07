@@ -24,6 +24,8 @@ public class Message {
         this.sendTime = Timestamp.valueOf(LocalDateTime.now());
     }
 
+
+
     public String getIdFrom() {
         return idFrom;
     }

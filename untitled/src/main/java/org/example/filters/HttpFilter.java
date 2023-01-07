@@ -1,4 +1,4 @@
-package org.example;
+package org.example.filters;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

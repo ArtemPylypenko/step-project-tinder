@@ -24,4 +24,8 @@ public class LikesController {
         return dao.getLikedUsers(id);
     }
 
+    public boolean checkPair(String idLiker, String idLiked) throws SQLException {
+        return dao.checkPair(idLiker, idLiked);
+    }
+
 }

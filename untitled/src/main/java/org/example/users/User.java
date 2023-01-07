@@ -15,12 +15,6 @@ public class User {
         this.imgURL = imgURL;
     }
 
-    public User(String name, String login, String password, String imgURL) {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.imgURL = imgURL;
-    }
 
     public String getId() {
         return id;

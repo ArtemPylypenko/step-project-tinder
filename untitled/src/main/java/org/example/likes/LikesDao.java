@@ -41,11 +41,11 @@ public class LikesDao implements Dao<Like> {
     public List<User> getLikedUsers(String id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select * from users\n" +
                 "where id in (select id_liked from likes where id_liker = ?)");
-        preparedStatement.setString(1,id);
+        preparedStatement.setString(1, id);
         ResultSet res = preparedStatement.executeQuery();
         List<User> userList = new ArrayList<>();
         User tmp;
-        while (res.next()){
+        while (res.next()) {
             String userId = res.getString("id");
             String name = res.getString("name");
             String login = res.getString("login");
@@ -57,5 +57,16 @@ public class LikesDao implements Dao<Like> {
 
 
         return userList;
+    }
+
+    public boolean checkPair(String idLiker, String idLiked) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from likes where " +
+                "(id_liker = ? and id_liked = ?) ");
+        preparedStatement.setString(1, idLiker);
+        preparedStatement.setString(2, idLiked);
+//        preparedStatement.setString(3, idLiked);
+//        preparedStatement.setString(4, idLiker);
+        ResultSet result = preparedStatement.executeQuery();
+        return result.next();
     }
 }

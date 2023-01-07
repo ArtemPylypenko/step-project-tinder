@@ -5,6 +5,7 @@ import freemarker.template.TemplateException;
 import org.example.GlobalSQLConnection;
 import org.example.likes.LikesController;
 import org.example.likes.LikesDao;
+import org.example.users.User;
 import org.example.users.UsersController;
 import org.example.users.UsersDao;
 
@@ -41,25 +42,35 @@ public class UsersServlet extends HttpServlet {
         showedUsers = 0;
     }
 
+    private boolean needToShowUser(User u, Cookie cookie) throws SQLException {
+
+        return (likesController.checkPair(cookie.getValue(), u.getId())
+                || cookie.getValue().equals(u.getId()));
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Cookie c = Optional.ofNullable(req.getCookies())
-                .flatMap(cc -> Arrays.stream(cc).filter(c1-> c1.getName().equals("id")).findFirst()).get();
-
-        String pathInfo = req.getPathInfo();
-
-        if (pathInfo == null)
-            pathInfo = "/like-page.ftl";
+                .flatMap(cc -> Arrays.stream(cc).filter(c1 -> c1.getName().equals("id")).findFirst()).get();
 
         try {
             if (showedUsers == usersController.getAllUsers().size()) {
+                showedUsers = 0;
                 resp.sendRedirect("/liked");
+                return;
+            }
+            if (needToShowUser(usersController.getAllUsers().get(showedUsers), c)) {
+                showedUsers++;
+                doGet(req, resp);
                 return;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null)
+            pathInfo = "/like-page.ftl";
 
         Configuration conf = new Configuration(Configuration.VERSION_2_3_31);
         conf.setDefaultEncoding(String.valueOf(StandardCharsets.UTF_8));
@@ -73,7 +84,6 @@ public class UsersServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-
         if (pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 
         try (PrintWriter w = resp.getWriter()) {
@@ -81,17 +91,21 @@ public class UsersServlet extends HttpServlet {
         } catch (TemplateException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Cookie c = Optional.ofNullable(req.getCookies())
+                .flatMap(cc -> Arrays.stream(cc).filter(c1 -> c1.getName().equals("id")).findFirst()).get();
+
         String pathInfo = "like-page.ftl";
         Path file = Path.of(osPrefix, pathInfo);
 
         System.out.println(req.getParameter("isLiked"));
         try {
             if (req.getParameter("isLiked").equals("true"))
-                likesController.save("1", usersController.getAllUsers().get(showedUsers).getId());
+                likesController.save(c.getValue(), usersController.getAllUsers().get(showedUsers).getId());
             showedUsers++;
             if (showedUsers == usersController.getAllUsers().size() + 1) {
                 showedUsers = 0;

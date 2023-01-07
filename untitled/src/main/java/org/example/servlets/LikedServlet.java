@@ -35,9 +35,10 @@ public class LikedServlet extends HttpServlet {
 
     public LikedServlet(String osPrefix ) throws SQLException {
         this.osPrefix = osPrefix;
+        this.conn = GlobalSQLConnection.get();
         usersController = new UsersController(new UsersDao(conn));
         likesController = new LikesController(new LikesDao(conn));
-        this.conn = GlobalSQLConnection.get();
+
     }
 
     @Override
@@ -57,7 +58,7 @@ public class LikedServlet extends HttpServlet {
 
 
         try {
-            data.put("user", likesController.getLikedUsers("1"));
+            data.put("user", likesController.getLikedUsers(c.getValue()));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

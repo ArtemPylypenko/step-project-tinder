@@ -29,4 +29,8 @@ public class UsersController {
     public boolean checkUserLogin(String login) throws SQLException {
         return dao.checkUserLogin(login);
     }
+    public User getUserByLogin(String login) throws SQLException {
+        return dao.getUserByLogin(login);
+    }
+
 }

@@ -44,6 +44,8 @@ public class ShowChatServlet extends HttpServlet {
                 .flatMap(cc -> Arrays.stream(cc).filter(c1-> c1.getName().equals("id")).findFirst()).get();
 
         String pathInfo = req.getPathInfo();
+        if(idRec == null)
+            idRec = req.getParameter("id");
 
         Configuration conf = new Configuration(Configuration.VERSION_2_3_31);
         conf.setDefaultEncoding(String.valueOf(StandardCharsets.UTF_8));
@@ -52,7 +54,7 @@ public class ShowChatServlet extends HttpServlet {
         HashMap<String, Object> data = new HashMap<>();
 
         try {
-            data.put("messages", messagesController.getAllBetween("1", idRec));
+            data.put("messages", messagesController.getAllBetween(c.getValue(), idRec));
             data.put("userTo", usersController.getUser(idRec));
         } catch (SQLException e) {
             throw new RuntimeException(e);

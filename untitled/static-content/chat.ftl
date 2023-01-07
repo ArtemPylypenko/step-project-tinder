@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="img/favicon.ico">
+    <link rel="icon">
 
     <title>Chat</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
@@ -77,9 +77,12 @@
                         <div class="col-md-2 options-left">
                             <i class="fa fa-smile-o"></i>
                         </div>
-                        <div class="col-md-7 pl-0">
-                            <input type="text" class="border-0" placeholder=" Send message"/>
-                        </div>
+                        <form action="/add-message/?userTo=${userTo.id}" method="post">
+                            <div class="col-md-7 pl-0">
+                                <input type="text" name="message" class="border-0" placeholder=" Send message"
+                                       enterkeyhint="send"/>
+                            </div>
+                        </form>
                         <div class="col-md-3 text-right options-right">
                             <i class="fa fa-picture-o mr-2"></i>
                         </div>

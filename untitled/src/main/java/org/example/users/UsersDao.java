@@ -23,19 +23,17 @@ public class UsersDao implements Dao<User> {
         statement.setString(1, id);
         ResultSet res = statement.executeQuery();
 
-        String name = "";
         String login = "";
         String password = "";
+        String name = "";
         String imgURL = "";
         while (res.next()) {
-            name = res.getString("name");
             login = res.getString("login");
             password = res.getString("password");
+            name = res.getString("name");
             imgURL = res.getString("img_url");
         }
-        User newUser = new User(id, name, login, password, imgURL);
-        System.out.println(newUser.toString());
-        return new User(id, name, login, password, imgURL);
+        return new User(id, login, password, name, imgURL);
 
     }
 
@@ -50,7 +48,7 @@ public class UsersDao implements Dao<User> {
             String login = res.getString("login");
             String password = res.getString("password");
             String imgURL = res.getString("img_url");
-            tmp = new User(id, name, login, password, imgURL);
+            tmp = new User(id, login, password, name, imgURL);
             userList.add(tmp);
         }
         return userList;
@@ -83,10 +81,27 @@ public class UsersDao implements Dao<User> {
             throw new RuntimeException(e);
         }
     }
+
     public boolean checkUserLogin(String login) throws SQLException {
         PreparedStatement statement = conn.prepareStatement("select * from users where login = ?");
         statement.setString(1, login);
         ResultSet res = statement.executeQuery();
         return !res.next();
+    }
+
+    public User getUserByLogin(String login) throws SQLException {
+        PreparedStatement statement = conn.prepareStatement("select * from users where login = ?");
+        statement.setString(1, login);
+        ResultSet res = statement.executeQuery();
+        User u = null;
+        while (res.next()) {
+            String id = res.getString("id");
+            String login1 = res.getString("login");
+            String password = res.getString("password");
+            String name = res.getString("name");
+            String imgUrl = res.getString("img_url");
+            u = new User(id, login1, password, name, imgUrl);
+        }
+        return u;
     }
 }
