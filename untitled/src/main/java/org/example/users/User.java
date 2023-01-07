@@ -1,13 +1,13 @@
 package org.example.users;
 
 public class User {
-    private Integer id;
+    private String id;
     private String name;
     private String login;
     private String password;
     private String imgURL;
 
-    public User(Integer id, String name, String login, String password, String imgURL) {
+    public User(String id, String login, String password, String name, String imgURL) {
         this.id = id;
         this.name = name;
         this.login = login;
@@ -22,7 +22,7 @@ public class User {
         this.imgURL = imgURL;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 

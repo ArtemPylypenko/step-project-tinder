@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface Dao<T> {
-    List<T> getAllBetween(Integer idSend, Integer idRec) throws SQLException;
+    List<T> getAllBetween(String idSend, String idRec) throws SQLException;
     void save(T t) throws SQLException;
 
 }

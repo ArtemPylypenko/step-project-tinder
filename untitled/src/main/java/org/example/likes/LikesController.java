@@ -12,15 +12,15 @@ public class LikesController {
         this.dao = dao;
     }
 
-    public List<Integer> getAllLiked(Integer id) throws SQLException {
+    public List<String> getAllLiked(String id) throws SQLException {
         return dao.getLikedId(id);
     }
 
-    public void save(Integer idLiker, Integer idLiked) throws SQLException {
+    public void save(String idLiker, String idLiked) throws SQLException {
         dao.save(idLiker, idLiked);
     }
 
-    public List<User> getLikedUsers(Integer id) throws SQLException {
+    public List<User> getLikedUsers(String id) throws SQLException {
         return dao.getLikedUsers(id);
     }
 

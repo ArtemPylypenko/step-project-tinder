@@ -11,7 +11,7 @@ public class UsersController {
         this.dao = dao;
     }
 
-    public User getUser(Integer id) throws SQLException {
+    public User getUser(String id) throws SQLException {
         return dao.get(id);
     }
 
@@ -23,7 +23,10 @@ public class UsersController {
         dao.save(u);
     }
 
-    public void deleteUser(Integer id) throws SQLException {
+    public void deleteUser(String id) throws SQLException {
         dao.delete(id);
+    }
+    public boolean checkUserLogin(String login) throws SQLException {
+        return dao.checkUserLogin(login);
     }
 }

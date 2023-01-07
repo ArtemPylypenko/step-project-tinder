@@ -10,7 +10,7 @@ public class MessagesController {
         this.dao = dao;
     }
 
-    public List<Message> getAllBetween(Integer idSend, Integer idRec) throws SQLException {
+    public List<Message> getAllBetween(String idSend, String idRec) throws SQLException {
         return dao.getAllBetween(idSend,idRec);
     }
     public void save(Message message) throws SQLException {

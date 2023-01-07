@@ -16,11 +16,11 @@ public class UsersDao implements Dao<User> {
     }
 
     @Override
-    public User get(Integer id) throws SQLException {
+    public User get(String id) throws SQLException {
         Optional<User> userOptional = Optional.empty();
 
         PreparedStatement statement = conn.prepareStatement("select * from users where id = ?");
-        statement.setLong(1, id);
+        statement.setString(1, id);
         ResultSet res = statement.executeQuery();
 
         String name = "";
@@ -45,7 +45,7 @@ public class UsersDao implements Dao<User> {
         List<User> userList = new ArrayList<>();
         User tmp = null;
         while (res.next()) {
-            Integer id = res.getInt("id");
+            String id = res.getString("id");
             String name = res.getString("name");
             String login = res.getString("login");
             String password = res.getString("password");
@@ -59,11 +59,12 @@ public class UsersDao implements Dao<User> {
     public void save(User t) throws SQLException {
         try {
             PreparedStatement statement = conn.prepareStatement(
-                    "insert into users (login,password,name,img_url) values (?,?,?,?)");
-            statement.setString(1, t.getLogin());
-            statement.setString(2, t.getPassword());
-            statement.setString(3, t.getName());
-            statement.setString(4, t.getImgURL());
+                    "insert into users (id,login,password,name,img_url) values (?,?,?,?,?)");
+            statement.setString(1, t.getId());
+            statement.setString(2, t.getLogin());
+            statement.setString(3, t.getPassword());
+            statement.setString(4, t.getName());
+            statement.setString(5, t.getImgURL());
 
             statement.execute();
         } catch (SQLException e) {
@@ -72,14 +73,20 @@ public class UsersDao implements Dao<User> {
     }
 
     @Override
-    public void delete(Integer id) throws SQLException {
+    public void delete(String id) throws SQLException {
         try {
             PreparedStatement statement = conn.prepareStatement(
                     "delete from users where id = ?");
-            statement.setLong(1, id);
+            statement.setString(1, id);
             statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public boolean checkUserLogin(String login) throws SQLException {
+        PreparedStatement statement = conn.prepareStatement("select * from users where login = ?");
+        statement.setString(1, login);
+        ResultSet res = statement.executeQuery();
+        return !res.next();
     }
 }

@@ -17,36 +17,36 @@ public class LikesDao implements Dao<Like> {
     }
 
     @Override
-    public List<Integer> getLikedId(Integer id) throws SQLException {
+    public List<String> getLikedId(String id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select * from likes where " +
                 "id_liker = ?");
-        preparedStatement.setInt(1, id);
-        List<Integer> likedList = new ArrayList<>();
+        preparedStatement.setString(1, id);
+        List<String> likedList = new ArrayList<>();
         ResultSet result = preparedStatement.executeQuery();
         while (result.next()) {
-            likedList.add(result.getInt("id_liked"));
+            likedList.add(result.getString("id_liked"));
         }
         return likedList;
     }
 
     @Override
-    public void save(Integer idLiker, Integer idLiked) throws SQLException {
+    public void save(String idLiker, String idLiked) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("insert into likes (id_liker,id_liked) values (?,?)");
-        preparedStatement.setInt(1, idLiker);
-        preparedStatement.setInt(2, idLiked);
+        preparedStatement.setString(1, idLiker);
+        preparedStatement.setString(2, idLiked);
         preparedStatement.execute();
     }
 
     @Override
-    public List<User> getLikedUsers(Integer id) throws SQLException {
+    public List<User> getLikedUsers(String id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select * from users\n" +
                 "where id in (select id_liked from likes where id_liker = ?)");
-        preparedStatement.setInt(1,id);
+        preparedStatement.setString(1,id);
         ResultSet res = preparedStatement.executeQuery();
         List<User> userList = new ArrayList<>();
         User tmp;
         while (res.next()){
-            Integer userId = res.getInt("id");
+            String userId = res.getString("id");
             String name = res.getString("name");
             String login = res.getString("login");
             String password = res.getString("password");

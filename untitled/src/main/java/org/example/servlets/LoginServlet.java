@@ -2,10 +2,8 @@ package org.example.servlets;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
-
 import org.example.GlobalSQLConnection;
-import org.example.likes.LikesController;
-import org.example.likes.LikesDao;
+import org.example.users.User;
 import org.example.users.UsersController;
 import org.example.users.UsersDao;
 
@@ -21,46 +19,33 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Optional;
+import java.util.UUID;
 
-public class LikedServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
     private final String osPrefix;
-    private int showedUsers;
-    private Connection conn;
-    LikesController likesController;
-    UsersController usersController;
 
-    public LikedServlet(String osPrefix ) throws SQLException {
+    private Connection conn;
+    private UsersController controller;
+
+    public LoginServlet(String osPrefix) throws SQLException {
         this.osPrefix = osPrefix;
-        usersController = new UsersController(new UsersDao(conn));
-        likesController = new LikesController(new LikesDao(conn));
         this.conn = GlobalSQLConnection.get();
+        controller = new UsersController(new UsersDao(conn));
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Cookie c = Optional.ofNullable(req.getCookies())
-                .flatMap(cc -> Arrays.stream(cc).filter(c1-> c1.getName().equals("id")).findFirst()).get();
 
         String pathInfo = req.getPathInfo();
         if (pathInfo == null) {
-            pathInfo = "/people-list.ftl";
+            pathInfo = "/login.html";
         }
         Configuration conf = new Configuration(Configuration.VERSION_2_3_31);
         conf.setDefaultEncoding(String.valueOf(StandardCharsets.UTF_8));
         conf.setDirectoryForTemplateLoading(new File(osPrefix));
 
         HashMap<String, Object> data = new HashMap<>();
-
-
-        try {
-            data.put("user", likesController.getLikedUsers("1"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
         if (pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
         Path file = Path.of(osPrefix, pathInfo);
@@ -75,5 +60,20 @@ public class LikedServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        try {
+            if(controller.checkUserLogin(req.getParameter("login"))){
+                String id = UUID.randomUUID().toString();
+                resp.addCookie(new Cookie("id", id));
+
+                controller.addUser(new User(id, req.getParameter("login"),
+                        req.getParameter("password"),"Some name","someImg"));
+
+                resp.sendRedirect("/users");
+            }else {
+                resp.sendRedirect("/login");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

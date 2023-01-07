@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface Dao<T> {
-    List<Integer> getLikedId(Integer id) throws SQLException;
+    List<String> getLikedId(String id) throws SQLException;
 
-    void save(Integer idLiker,Integer idLiked) throws SQLException;
-    List<User> getLikedUsers(Integer id) throws SQLException;
+    void save(String idLiker,String idLiked) throws SQLException;
+    List<User> getLikedUsers(String id) throws SQLException;
 
 }
