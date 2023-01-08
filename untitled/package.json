@@ -1,0 +1,20 @@
+{
+  "name": "step-project-tinder",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "echo \"No build specified\" && exit 1",
+    "test": "echo \"No test specified\" && exit 1",
+    "start": "untitled/out/artifacts/untitled_jar/untitled.jar"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArtemPylypenko/step-project-tinder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArtemPylypenko/step-project-tinder/issues"
+  },
+  "homepage": "https://github.com/ArtemPylypenko/step-project-tinder#readme"
+}
