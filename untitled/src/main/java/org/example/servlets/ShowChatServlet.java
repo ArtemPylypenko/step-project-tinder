@@ -73,31 +73,9 @@ public class ShowChatServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Messages post");
-        String pathInfo = "/chat.ftl";
-        System.out.println("id= " + req.getParameter("id"));
+
         idRec = String.valueOf(req.getParameter("id"));
-        System.out.println("ID_REC= " + idRec);
         resp.sendRedirect("/messages/chat.ftl");
 
-//        System.out.println(req.getPathInfo());
-//
-//        Configuration conf = new Configuration(Configuration.VERSION_2_3_31);
-//        conf.setDefaultEncoding(String.valueOf(StandardCharsets.UTF_8));
-//        conf.setDirectoryForTemplateLoading(new File(osPrefix));
-//
-//        HashMap<String, Object> data = new HashMap<>();
-//
-//        ArrayList<Profile> dataList = new ArrayList<>();
-//
-//
-//        if (pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
-//        Path file = Path.of(osPrefix, pathInfo);
-//
-//        try (PrintWriter w = resp.getWriter()) {
-//            conf.getTemplate(pathInfo).process(data, w);
-//        } catch (TemplateException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 }

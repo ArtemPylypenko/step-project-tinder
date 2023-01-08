@@ -18,5 +18,8 @@ public class GlobalSQLConnection {
         }
         return conn;
     }
+    public static void close() throws SQLException {
+        conn.close();
+    }
 
 }

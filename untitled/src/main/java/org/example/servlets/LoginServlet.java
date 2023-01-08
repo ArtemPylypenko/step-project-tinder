@@ -3,6 +3,7 @@ package org.example.servlets;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import org.example.GlobalSQLConnection;
+import org.example.UserGenerator;
 import org.example.users.User;
 import org.example.users.UsersController;
 import org.example.users.UsersDao;
@@ -61,15 +62,15 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         try {
-            if(controller.checkUserLogin(req.getParameter("login"))){
+            if (controller.checkUserLogin(req.getParameter("login"))) {
                 String id = UUID.randomUUID().toString();
                 resp.addCookie(new Cookie("id", id));
 
-                controller.addUser(new User(id, req.getParameter("login"),
-                        req.getParameter("password"),"Some name","someImg"));
+                controller.addUser(new User(id, req.getParameter("login"), req.getParameter("password")
+                        , UserGenerator.getName(), UserGenerator.getImgUrl()));
 
                 resp.sendRedirect("/users");
-            }else {
+            } else {
                 User curUser = controller.getUserByLogin(req.getParameter("login"));
                 resp.addCookie(new Cookie("id", curUser.getId()));
                 resp.sendRedirect("/users");

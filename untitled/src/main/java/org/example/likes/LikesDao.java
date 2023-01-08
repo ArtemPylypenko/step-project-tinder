@@ -51,7 +51,7 @@ public class LikesDao implements Dao<Like> {
             String login = res.getString("login");
             String password = res.getString("password");
             String imgURL = res.getString("img_url");
-            tmp = new User(userId, name, login, password, imgURL);
+            tmp = new User(userId, login, password, name, imgURL);
             userList.add(tmp);
         }
 

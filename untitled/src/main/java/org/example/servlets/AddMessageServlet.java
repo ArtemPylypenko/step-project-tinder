@@ -30,10 +30,7 @@ public class AddMessageServlet extends HttpServlet {
         Cookie c = Optional.ofNullable(req.getCookies())
                 .flatMap(cc -> Arrays.stream(cc).filter(c1 -> c1.getName().equals("id")).findFirst()).get();
 
-        System.out.println("add message");
-        System.out.println(c.getValue());
-        System.out.println(req.getParameter("userTo"));
-        System.out.println("Message = " + req.getParameter("message"));
+
         try {
             controller.save(new Message(c.getValue(),req.getParameter("userTo"),req.getParameter("message")));
         } catch (SQLException e) {
