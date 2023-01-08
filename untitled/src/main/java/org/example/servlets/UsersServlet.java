@@ -102,7 +102,6 @@ public class UsersServlet extends HttpServlet {
         String pathInfo = "like-page.ftl";
         Path file = Path.of(osPrefix, pathInfo);
 
-        System.out.println(req.getParameter("isLiked"));
         try {
             if (req.getParameter("isLiked").equals("true"))
                 likesController.save(c.getValue(), usersController.getAllUsers().get(showedUsers).getId());
